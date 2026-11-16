@@ -5,7 +5,16 @@ namespace TWIN.Util
     /// <summary>Placeholder audio: generates short clips in memory so the greybox has no audio assets.</summary>
     public static class ToneGenerator
     {
-        static AudioClip s_alarm, s_blip, s_ringTone;
+        static AudioClip s_alarm, s_blip, s_ringTone, s_organ;
+
+        /// <summary>Soft organ hum (two low sines with slow beating), 4 s, loopable. Funeral ending.</summary>
+        public static AudioClip Organ()
+        {
+            if (s_organ == null) s_organ = Make("TWIN_Organ", 4f, t =>
+                (Mathf.Sin(2f * Mathf.PI * 110f * t) + 0.6f * Mathf.Sin(2f * Mathf.PI * 165f * t) + 0.3f * Mathf.Sin(2f * Mathf.PI * 220.5f * t))
+                * 0.25f * (0.85f + 0.15f * Mathf.Sin(2f * Mathf.PI * 0.25f * t)));
+            return s_organ;
+        }
 
         /// <summary>Pulsed 880 Hz alarm, 1 second, loopable.</summary>
         public static AudioClip Alarm()

@@ -33,12 +33,26 @@ namespace TWIN.Tests
         {
             var f = Flow();
             var s = new GameState();
-            string[] expected = { f.bedroom, f.bathroom, f.livingRoom, f.street, f.shop, f.frontDoor, f.lastMorning, f.endOfDemo, f.boot };
+            string[] expected = { f.bedroom, f.bathroom, f.livingRoom, f.street, f.shop, f.frontDoor, f.lastMorning, f.endOfDemo, f.bedroom };
             string cur = f.boot;
             foreach (var e in expected)
             {
                 cur = f.NextAfter(cur, s);
                 Assert.AreEqual(e, cur);
+            }
+        }
+
+        [Test]
+        public void EveryEnding_HasItsOwnScene()
+        {
+            var f = Flow();
+            var names = new System.Collections.Generic.HashSet<string>();
+            foreach (Ending e in System.Enum.GetValues(typeof(Ending)))
+            {
+                var scene = f.EndingScene(e);
+                Assert.IsTrue(scene.StartsWith("End_"), $"{e} -> {scene}");
+                Assert.IsTrue(names.Add(scene), $"{scene} used twice");
+                Assert.Contains(scene, f.All, "ending scene must be in the build list");
             }
         }
 

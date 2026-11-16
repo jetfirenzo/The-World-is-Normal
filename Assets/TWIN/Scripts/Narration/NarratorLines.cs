@@ -30,7 +30,22 @@ namespace TWIN.Narration
         public string noteTextLastMorning = "Don't go back to sleep.";
         public string backToSleep = "Time to go back to sleep, Sam.";
 
-        [Header("End of demo")]
+        [Header("Endings")]
+        public string restartPrompt = "Press R to start a new run";
+        [Tooltip("Ending 1, narrator, warm")]
+        public string goodBoySam = "Good boy, Sam.";
+        [Tooltip("Ending 2, the text the hand writes (same as the bathroom note)")]
+        public string noteBeingWritten = "Your name isn't Sam.";
+        [Tooltip("Ending 3, the mother")]
+        public string morningSam = "Morning, Sam.";
+        [Tooltip("Ending 3, nameplate on the coffin")]
+        public string coffinNameplate = "SAM";
+        [Tooltip("Ending 4, shown on white")]
+        public string takeOffHeadset = "Take off the headset.";
+        [Tooltip("Ending 5, placeholder until the ending is described")]
+        public string systemError = "SYSTEM ERROR";
+
+        [Header("End of demo (debug fallback)")]
         public string endOfDemo = "END OF DEMO";
     }
 }

@@ -65,6 +65,9 @@ namespace TWIN.Core
         /// <summary>Scene 7 rule: a door appears if strangeCount >= 2 OR the note was pocketed.</summary>
         public bool DoorAppearsInLastMorning => strangeCount >= 2 || notePocketed;
 
+        /// <summary>True when fork 4 was answered STRANGE (Sam opened the door). False when Sam went back to bed or no door appeared.</summary>
+        public bool DoorOpened => forkAnswered[3] && forkWasStrange[3];
+
         public void Reset()
         {
             strangeCount = 0;

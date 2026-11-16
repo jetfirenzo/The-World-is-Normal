@@ -1,12 +1,13 @@
 using TMPro;
 using TWIN.Core;
+using TWIN.Haptics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace TWIN.Debugging
 {
     /// <summary>
-    /// F1 toggles a state readout. F5..F12 jump to a scene, N skips to the next scene, R restarts the demo.
+    /// F1 toggles a state readout. F5..F12 jump to a scene, N skips to the next scene, R starts a new run.
     /// </summary>
     public class DebugOverlay : MonoBehaviour
     {
@@ -40,13 +41,15 @@ namespace TWIN.Debugging
 
             if (text == null || !text.gameObject.activeSelf || gm == null) return;
             var s = gm.State;
+            var haptics = HapticsService.Instance != null ? HapticsService.Instance.LastEvent : "";
             text.text =
                 $"<b>TWIN debug</b> (F1 hide)\n" +
                 $"scene: {gm.CurrentScene}\n" +
                 $"strangeCount: {s.strangeCount}   route: {s.route}   notePocketed: {s.notePocketed}\n" +
-                $"forks: {Fork(s, 0)} {Fork(s, 1)} {Fork(s, 2)} {Fork(s, 3)}\n" +
-                $"ending: {EndingResolver.Resolve(s)}\n" +
-                $"<size=70%>N next scene | R restart | F5-F12 jump | 1/2 vote | Esc cursor</size>";
+                $"forks: {Fork(s, 0)} {Fork(s, 1)} {Fork(s, 2)} {Fork(s, 3)}   doorOpened: {s.DoorOpened}\n" +
+                $"ending: {EndingResolver.DisplayName(EndingResolver.Resolve(s))}{(gm.useEndOfDemoFallback ? "  (END OF DEMO fallback on)" : "")}\n" +
+                $"haptics: {haptics}\n" +
+                $"<size=70%>N next scene | R new run | F5-F12 jump | 1/2 vote | Esc cursor</size>";
         }
 
         static string Fork(GameState s, int i) => !s.forkAnswered[i] ? "-" : (s.forkWasStrange[i] ? "S" : "n");

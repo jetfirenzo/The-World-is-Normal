@@ -23,8 +23,8 @@ namespace TWIN.Scenes
                     $"strangeCount: {s.strangeCount}\n" +
                     $"route: {s.route}\n" +
                     $"notePocketed: {s.notePocketed}\n\n" +
-                    $"ending that would play:\n<b>{EndingResolver.Resolve(s)}</b>\n\n" +
-                    "<size=60%>press R or the button to restart</size>";
+                    $"ending that would play:\n<b>{EndingResolver.DisplayName(EndingResolver.Resolve(s))}</b>\n\n" +
+                    "<size=60%>press R or the button to start a new run</size>";
             }
             if (restartButton != null) restartButton.onClick.AddListener(() => { DesktopRig.SetCursorFree(false); gm.RestartDemo(); });
             DesktopRig.SetCursorFree(true);

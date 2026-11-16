@@ -37,6 +37,9 @@ namespace TWIN.EditorTools
         public const string PrefabsDir = Root + "/Prefabs";
         public const string ResourcesDir = Root + "/Resources";
         public const string PlayerLayerName = "Player";
+        public const string EndingsDir = DataDir + "/Endings";
+        public const string SignalsDir = EndingsDir + "/Signals";
+        public const string ClipsDir = EndingsDir + "/Clips";
 
         // Filled by BuildMaterials / BuildData / BuildPrefabs, used by the scene builders.
         static Dictionary<string, Material> M = new();
@@ -55,6 +58,7 @@ namespace TWIN.EditorTools
             BuildData();
             BuildPrefabs();
             BuildScenes();
+            BuildEndings();
             SetBuildSettings();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -71,7 +75,7 @@ namespace TWIN.EditorTools
 
         static void EnsureFolders()
         {
-            foreach (var d in new[] { Root, ScenesDir, MaterialsDir, DataDir, ForksDir, PrefabsDir, ResourcesDir })
+            foreach (var d in new[] { Root, ScenesDir, MaterialsDir, DataDir, ForksDir, PrefabsDir, ResourcesDir, EndingsDir, SignalsDir, ClipsDir })
             {
                 if (!AssetDatabase.IsValidFolder(d))
                 {
@@ -277,7 +281,8 @@ namespace TWIN.EditorTools
             forkCtl.providerBehaviour = vote;
             var fader = root.AddComponent<ScreenFader>();
             var dbg = root.AddComponent<DebugOverlay>();
-            gm.narrator = narrator; gm.forkController = forkCtl; gm.fader = fader;
+            var haptics = root.AddComponent<TWIN.Haptics.HapticsService>();
+            gm.narrator = narrator; gm.forkController = forkCtl; gm.fader = fader; gm.haptics = haptics;
 
             // Canvas
             var canvasGo = new GameObject("Canvas", typeof(RectTransform));
@@ -309,6 +314,15 @@ namespace TWIN.EditorTools
             vote.panel = panel.gameObject; vote.titleText = title; vote.timerText = timer; vote.tallyText = tally;
             vote.normalButton = bNormal; vote.strangeButton = bStrange; vote.normalLabel = lNormal; vote.strangeLabel = lStrange;
             panel.gameObject.SetActive(false);
+
+            // Ending texts (hidden until an ending shows them)
+            var center = UIText(canvasGo.transform, "CenterText", "", 64, TextAlignmentOptions.Center, Vector2.zero, new Vector2(1400, 300));
+            center.fontStyle = FontStyles.Bold;
+            center.gameObject.SetActive(false);
+            var restart = UIText(canvasGo.transform, "RestartPrompt", "", 30, TextAlignmentOptions.Bottom, new Vector2(0, 30), new Vector2(1200, 50), new Vector2(0.5f, 0f));
+            restart.color = new Color(1f, 1f, 1f, 0.85f);
+            restart.gameObject.SetActive(false);
+            gm.centerText = center; gm.restartPromptText = restart;
 
             var dbgText = UIText(canvasGo.transform, "DebugText", "", 20, TextAlignmentOptions.TopLeft, new Vector2(10, -10), new Vector2(900, 200), new Vector2(0f, 1f));
             dbgText.color = new Color(0.6f, 1f, 0.6f);

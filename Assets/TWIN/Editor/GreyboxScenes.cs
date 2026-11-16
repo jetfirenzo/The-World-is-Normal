@@ -686,6 +686,16 @@ namespace TWIN.EditorTools
 
             var bedI = b.bed.GetComponent<Interactable>();
             Spawn(new Vector3(0.0f, 0f, -0.8f), 0f);
+
+            // What the ending scenes (loaded additively) need from this one.
+            var bridge = new GameObject("LastMorningBridge").AddComponent<LastMorningBridge>();
+            var lie = Group("BedLiePoint", b.root, new Vector3(1.0f, -1.0f, 0.9f), new Vector3(0, 60f, 0)); // rig root 1 m under the floor = eyes at mattress height
+            bridge.bedLiePoint = lie.transform;
+            bridge.appearedDoor = appearedGo.transform;
+            bridge.northWall = b.root.Find("Wall_North").gameObject;
+            bridge.bedroomRoot = b.root.gameObject;
+            bridge.handNote = handNote;
+
             var s = new GameObject("S7_LastMorning").AddComponent<S7_LastMorning>();
             s.alarm = b.alarm.GetComponent<Interactable>(); s.alarmRenderer = b.alarmRenderer; s.alarmAudio = b.alarmAudio; s.clockText = b.clock;
             s.handNote = handNote; s.handNoteText = handText; s.appearedDoor = appearedGo; s.appearedDoorInteractable = appearedI; s.bed = bedI;

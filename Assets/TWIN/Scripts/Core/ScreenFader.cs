@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace TWIN.Core
 {
-    /// <summary>Full-screen black image used for scene transitions. Starts transparent.</summary>
+    /// <summary>Full-screen image used for fades. Black by default; endings can fade to white.</summary>
     public class ScreenFader : MonoBehaviour
     {
         public Image image;
@@ -12,11 +12,32 @@ namespace TWIN.Core
         void Awake()
         {
             if (image != null) image.raycastTarget = false;
-            SetAlpha(0f);
+            ResetToBlack();
         }
 
         public IEnumerator FadeOut(float seconds) => Fade(0f, 1f, seconds);
         public IEnumerator FadeIn(float seconds) => Fade(1f, 0f, seconds);
+
+        /// <summary>Fade to a colour (white for the Wake Up ending).</summary>
+        public IEnumerator FadeOut(float seconds, Color color)
+        {
+            SetColor(color);
+            yield return Fade(0f, 1f, seconds);
+        }
+
+        public void SetColor(Color color)
+        {
+            if (image == null) return;
+            var a = image.color.a;
+            image.color = new Color(color.r, color.g, color.b, a);
+        }
+
+        /// <summary>Transparent and black again (used on restart).</summary>
+        public void ResetToBlack()
+        {
+            if (image == null) return;
+            image.color = new Color(0f, 0f, 0f, 0f);
+        }
 
         IEnumerator Fade(float from, float to, float seconds)
         {

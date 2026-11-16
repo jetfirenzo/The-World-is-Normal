@@ -35,6 +35,21 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/TWIN/Scenes/99_EndOfDemo.unity
     guid: 36fadc36e0c549e418e8149f0e2dc723
+  - enabled: 1
+    path: Assets/TWIN/Scenes/End_GoodMorningSam.unity
+    guid: 36e2e0d3cfb46844fbb53b60d309fdb6
+  - enabled: 1
+    path: Assets/TWIN/Scenes/End_TheNote.unity
+    guid: e18309a5ebbcde14ab7bf72d327a32c7
+  - enabled: 1
+    path: Assets/TWIN/Scenes/End_TheFuneral.unity
+    guid: c1eca2b85440ffa44bb78debac9fde35
+  - enabled: 1
+    path: Assets/TWIN/Scenes/End_WakeUp.unity
+    guid: 07ba6463154aac94caf4807668962167
+  - enabled: 1
+    path: Assets/TWIN/Scenes/End_SystemError.unity
+    guid: 5456553f3b3611e4a8dab9e89b722648
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260, type: 2}
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: dc5a169419fa04987b057f65238cf3ba, type: 2}

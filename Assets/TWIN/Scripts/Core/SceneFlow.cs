@@ -4,7 +4,8 @@ namespace TWIN.Core
 {
     /// <summary>
     /// The ordered list of scenes. Edit the asset (Assets/TWIN/Data/SceneFlow.asset) to rename or
-    /// reorder scenes; the branch after the shop is decided by fork 3 (see GameManager.NextSceneAfter).
+    /// reorder scenes; the branch after the shop is decided by fork 3, the ending after the last morning
+    /// by EndingResolver (see GameManager.GoToNextScene).
     /// </summary>
     [CreateAssetMenu(menuName = "TWIN/Scene Flow", fileName = "SceneFlow")]
     public class SceneFlow : ScriptableObject
@@ -20,13 +21,38 @@ namespace TWIN.Core
         public string lastMorning = "07_LastMorning";
         public string endOfDemo = "99_EndOfDemo";
 
-        /// <summary>Every scene in play order (branch scenes both listed).</summary>
+        [Header("Endings (loaded additively on top of the last morning)")]
+        public string endGoodMorningSam = "End_GoodMorningSam";
+        public string endTheNote = "End_TheNote";
+        public string endTheFuneral = "End_TheFuneral";
+        public string endWakeUp = "End_WakeUp";
+        public string endSystemError = "End_SystemError";
+
+        /// <summary>Every scene in play order (branch scenes and endings all listed), for the Build Settings.</summary>
         public string[] All => new[]
         {
-            boot, bedroom, bathroom, livingRoom, street, shop, frontDoor, backrooms, lastMorning, endOfDemo
+            boot, bedroom, bathroom, livingRoom, street, shop, frontDoor, backrooms, lastMorning, endOfDemo,
+            endGoodMorningSam, endTheNote, endTheFuneral, endWakeUp, endSystemError
         };
 
-        /// <summary>The scene that follows <paramref name="current"/>, given the state. Null at the end.</summary>
+        public string EndingScene(Ending ending)
+        {
+            switch (ending)
+            {
+                case Ending.GoodMorningSam: return endGoodMorningSam;
+                case Ending.TheNote: return endTheNote;
+                case Ending.TheFuneral: return endTheFuneral;
+                case Ending.WakeUp: return endWakeUp;
+                case Ending.SystemError: return endSystemError;
+                default: return endOfDemo;
+            }
+        }
+
+        /// <summary>
+        /// The scene that follows <paramref name="current"/>, given the state. Null at the end.
+        /// After the last morning this returns the END OF DEMO fallback; GameManager decides whether to
+        /// load the resolved ending instead.
+        /// </summary>
         public string NextAfter(string current, GameState state)
         {
             if (current == boot) return bedroom;
@@ -38,7 +64,7 @@ namespace TWIN.Core
             if (current == frontDoor) return lastMorning;
             if (current == backrooms) return lastMorning;
             if (current == lastMorning) return endOfDemo;
-            if (current == endOfDemo) return boot;
+            if (current == endOfDemo) return bedroom;
             return null;
         }
     }
