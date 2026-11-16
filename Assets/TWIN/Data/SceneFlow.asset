@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccad86afa28e2d44085886e804081517, type: 3}
+  m_Name: SceneFlow
+  m_EditorClassIdentifier: TWIN.Runtime::TWIN.Core.SceneFlow
+  boot: 00_Boot
+  bedroom: 01_Bedroom
+  bathroom: 02_Bathroom
+  livingRoom: 03_LivingRoom
+  street: 04_Street
+  shop: 05_Shop
+  frontDoor: 06A_FrontDoor
+  backrooms: 06B_Backrooms
+  lastMorning: 07_LastMorning
+  endOfDemo: 99_EndOfDemo
