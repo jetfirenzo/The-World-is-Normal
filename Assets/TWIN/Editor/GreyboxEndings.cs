@@ -62,10 +62,17 @@ namespace TWIN.EditorTools
                 receiver.AddReaction(signal, evt);
             }
 
-            /// <summary>An Animation track on <paramref name="target"/> playing <paramref name="clip"/> from start for duration.</summary>
-            public void Animate(GameObject target, AnimationClip clip, double start, double duration, string trackName)
+            /// <summary>
+            /// An Animation track playing <paramref name="clip"/> from start for duration. The Animator sits on
+            /// <paramref name="rig"/> (the animated prop's parent) and the clip animates the child by path. Never
+            /// animate the Animator's own root transform: Timeline then applies its track offset (0,0,0 by default)
+            /// and the prop jumps to the world origin.
+            /// </summary>
+            public void Animate(GameObject rig, AnimationClip clip, double start, double duration, string trackName)
             {
-                var animator = target.GetComponent<Animator>() ?? target.AddComponent<Animator>();
+                // Never use ?? on Unity objects: a missing component is a "fake null" that ?? treats as non-null.
+                var animator = rig.GetComponent<Animator>();
+                if (animator == null) animator = rig.AddComponent<Animator>();
                 var track = timeline.CreateTrack<AnimationTrack>(null, trackName);
                 var tc = track.CreateClip(clip);
                 tc.start = start;
@@ -83,7 +90,8 @@ namespace TWIN.EditorTools
             timeline.name = endingName;
             AssetDatabase.CreateAsset(timeline, path);
 
-            var director = controller.GetComponent<PlayableDirector>() ?? controller.gameObject.AddComponent<PlayableDirector>();
+            var director = controller.GetComponent<PlayableDirector>();
+            if (director == null) director = controller.gameObject.AddComponent<PlayableDirector>();
             director.playableAsset = timeline;
             director.playOnAwake = false; // EndingController.Start plays it after it found the bridge
             director.extrapolationMode = DirectorWrapMode.Hold;
@@ -96,24 +104,30 @@ namespace TWIN.EditorTools
             return new TimelineBuild { timeline = timeline, director = director, signals = signals, receiver = receiver, controller = controller, prefix = endingName };
         }
 
-        /// <summary>A clip that moves a transform's local position from a to b (ease in/out).</summary>
-        static AnimationClip MoveClip(string name, Vector3 from, Vector3 to, float seconds)
+        /// <summary>A clip that moves the child at <paramref name="path"/> from a to b in its parent's space (ease in/out).</summary>
+        static AnimationClip MoveClip(string name, string path, Vector3 from, Vector3 to, float seconds)
         {
             var clip = new AnimationClip { name = name };
-            clip.SetCurve("", typeof(Transform), "localPosition.x", AnimationCurve.EaseInOut(0f, from.x, seconds, to.x));
-            clip.SetCurve("", typeof(Transform), "localPosition.y", AnimationCurve.EaseInOut(0f, from.y, seconds, to.y));
-            clip.SetCurve("", typeof(Transform), "localPosition.z", AnimationCurve.EaseInOut(0f, from.z, seconds, to.z));
+            clip.SetCurve(path, typeof(Transform), "localPosition.x", AnimationCurve.EaseInOut(0f, from.x, seconds, to.x));
+            clip.SetCurve(path, typeof(Transform), "localPosition.y", AnimationCurve.EaseInOut(0f, from.y, seconds, to.y));
+            clip.SetCurve(path, typeof(Transform), "localPosition.z", AnimationCurve.EaseInOut(0f, from.z, seconds, to.z));
             return SaveClip(clip);
         }
 
-        /// <summary>A clip that rotates a transform's local Euler angles from a to b (ease in/out).</summary>
-        static AnimationClip RotateClip(string name, Vector3 from, Vector3 to, float seconds)
+        /// <summary>A clip that rotates the child at <paramref name="path"/> through local Euler angles a to b (ease in/out).</summary>
+        static AnimationClip RotateClip(string name, string path, Vector3 from, Vector3 to, float seconds)
         {
             var clip = new AnimationClip { name = name };
-            AnimationUtility.SetEditorCurve(clip, EditorCurveBinding.FloatCurve("", typeof(Transform), "localEulerAnglesRaw.x"), AnimationCurve.EaseInOut(0f, from.x, seconds, to.x));
-            AnimationUtility.SetEditorCurve(clip, EditorCurveBinding.FloatCurve("", typeof(Transform), "localEulerAnglesRaw.y"), AnimationCurve.EaseInOut(0f, from.y, seconds, to.y));
-            AnimationUtility.SetEditorCurve(clip, EditorCurveBinding.FloatCurve("", typeof(Transform), "localEulerAnglesRaw.z"), AnimationCurve.EaseInOut(0f, from.z, seconds, to.z));
+            AnimationUtility.SetEditorCurve(clip, EditorCurveBinding.FloatCurve(path, typeof(Transform), "localEulerAnglesRaw.x"), AnimationCurve.EaseInOut(0f, from.x, seconds, to.x));
+            AnimationUtility.SetEditorCurve(clip, EditorCurveBinding.FloatCurve(path, typeof(Transform), "localEulerAnglesRaw.y"), AnimationCurve.EaseInOut(0f, from.y, seconds, to.y));
+            AnimationUtility.SetEditorCurve(clip, EditorCurveBinding.FloatCurve(path, typeof(Transform), "localEulerAnglesRaw.z"), AnimationCurve.EaseInOut(0f, from.z, seconds, to.z));
             return SaveClip(clip);
+        }
+
+        /// <summary>An empty parent for an animated prop (holds the Animator), placed at the prop's parent's origin.</summary>
+        static GameObject Rig(string name, Transform parent, Vector3? pos = null)
+        {
+            return Group(name, parent, pos ?? Vector3.zero);
         }
 
         static AnimationClip SaveClip(AnimationClip clip)
@@ -184,13 +198,15 @@ namespace TWIN.EditorTools
             b.alarmRenderer.sharedMaterial = M["Grey_Prop"];
 
             // Someone else in the bed: the shared NPC prefab, lying down, face turned to the wall, under a duvet.
+            // FigureRig (Animator) -> Hips (the sit-up pivot, animated) -> FigureInBed (feet 0.7 m below the hips).
+            var figureRig = Rig("FigureRig", b.root);
+            var hips = Group("Hips", figureRig.transform, new Vector3(1.6f, 0.65f, 1.25f), new Vector3(-90f, 180f, 0f)); // lying, head to the pillow (+z)
             var figure = (GameObject)PrefabUtility.InstantiatePrefab(s_childPrefab);
             figure.name = "FigureInBed";
-            figure.transform.SetParent(b.root, false);
-            figure.transform.localPosition = new Vector3(1.6f, 0.65f, 0.4f);
-            figure.transform.localRotation = Quaternion.Euler(-90f, 180f, 0f); // lying on the back, head at the pillow (+z)
+            figure.transform.SetParent(hips.transform, false);
+            figure.transform.localPosition = new Vector3(0f, -0.7f, 0f);
             figure.GetComponent<WeepingChild>().enabled = false; // the Timeline animates it; no look-at-player rule
-            figure.transform.Find("Face").localRotation = Quaternion.Euler(0f, 90f, 0f);      // face turned away
+            figure.transform.Find("Face").localRotation = Quaternion.Euler(0f, -90f, 0f);     // face turned away from the player, to the wall
             var duvet = Box("Duvet", b.root, new Vector3(1.6f, 0.75f, 0.9f), new Vector3(1.5f, 0.25f, 1.5f), "Accent_Blue");
             Object.DestroyImmediate(duvet.GetComponent<Collider>());
 
@@ -199,13 +215,14 @@ namespace TWIN.EditorTools
             Object.DestroyImmediate(note.GetComponent<Collider>());
             var noteText = Label3D(note.transform, "", new Vector3(0, 0.51f, 0), new Vector3(90f, 0, 0), new Vector2(0.2f, 0.14f), 0.3f);
             noteText.fontStyle = FontStyles.Italic;
-            var hand = Box("Hand", b.root, new Vector3(1.4f, 0.9f, 1.3f), new Vector3(0.09f, 0.04f, 0.18f), "Face");
+            var handRig = Rig("HandRig", b.root);
+            var hand = Box("Hand", handRig.transform, new Vector3(0.55f, 0.95f, 1.25f), new Vector3(0.09f, 0.04f, 0.18f), "Face");
             Object.DestroyImmediate(hand.GetComponent<Collider>());
             var pen = Prim(PrimitiveType.Cylinder, "Pen", hand.transform, new Vector3(0.6f, 0f, 0.6f), new Vector3(0.15f, 2.0f, 0.1f), "Grey_Dark", new Vector3(60f, 0, 0));
             Object.DestroyImmediate(pen.GetComponent<Collider>());
 
-            // Standing next to the bed, looking down at the nightstand.
-            var stand = StandPoint(b.root, new Vector3(1.4f, 0f, 1.3f), -45f, 35f);
+            // Standing beside the bed (west side): nightstand ahead-left, the figure in the bed ahead-right.
+            var stand = StandPoint(b.root, new Vector3(0.3f, 0f, 0.9f), 35f, 30f);
 
             var ctl = new GameObject("TheNoteController").AddComponent<TheNoteController>();
             ctl.ending = Ending.TheNote;
@@ -218,10 +235,10 @@ namespace TWIN.EditorTools
             tl.Beat(1.0, nameof(EndingController.FadeToBlack));                // short fade (1 s)
             tl.Beat(2.5, nameof(TheNoteController.ArriveStanding));           // suddenly standing next to the bed
             tl.Beat(4.5, nameof(TheNoteController.HandStartsMoving));         // slow haptic pulse
-            tl.Animate(hand, MoveClip("TheNote_HandToNote", hand.transform.localPosition, new Vector3(0.5f, 0.66f, 1.9f), 2.5f), 4.5, 2.5, "Hand moves on its own");
+            tl.Animate(handRig, MoveClip("TheNote_HandToNote", "Hand", hand.transform.localPosition, new Vector3(0.66f, 0.65f, 1.86f), 2.5f) /* beside the note, not on it */, 4.5, 2.5, "Hand moves on its own");
             tl.Beat(7.2, nameof(TheNoteController.WriteNote));                // letters appear (writeSeconds)
             tl.Beat(11.5, nameof(EndingController.StopHaptics));
-            tl.Animate(figure, RotateClip("TheNote_FigureSitsUp", new Vector3(-90f, 180f, 0f), new Vector3(-20f, 180f, 0f), 2.5f), 11.5, 2.5, "Figure sits up");
+            tl.Animate(figureRig, RotateClip("TheNote_FigureSitsUp", "Hips", new Vector3(-90f, 180f, 0f), new Vector3(-20f, 180f, 0f), 2.5f), 11.5, 2.5, "Figure sits up");
             tl.Beat(13.8, nameof(EndingController.CutToBlack));
             tl.Beat(14.5, nameof(EndingController.ShowRestartPrompt));
             Save(scene, s_flow.endTheNote);
@@ -263,9 +280,10 @@ namespace TWIN.EditorTools
             // Open coffin with Sam in it.
             var stand = Box("CoffinStand", root, new Vector3(-1f, 0.35f, 8.2f), new Vector3(0.8f, 0.7f, 2.2f), "Grey_Dark");
             var coffin = Box("Coffin", root, new Vector3(-1f, 0.95f, 8.2f), new Vector3(0.9f, 0.5f, 2.3f), "Wood");
-            var body = Prim(PrimitiveType.Capsule, "Sam", coffin.transform, new Vector3(0, 0.3f, 0), new Vector3(0.5f, 0.42f, 0.5f), "Grey_Prop", new Vector3(90f, 0, 0));
+            // Sam in the player's blue (the mother has the NPC face, Sam does not).
+            var body = Prim(PrimitiveType.Capsule, "Sam", coffin.transform, new Vector3(0, 0.3f, 0), new Vector3(0.5f, 0.42f, 0.5f), "Accent_Blue", new Vector3(90f, 0, 0));
             Object.DestroyImmediate(body.GetComponent<Collider>());
-            var head = Prim(PrimitiveType.Sphere, "Head", coffin.transform, new Vector3(0, 0.45f, -0.35f), new Vector3(0.35f, 0.6f, 0.13f), "Face");
+            var head = Prim(PrimitiveType.Sphere, "Head", coffin.transform, new Vector3(0, 0.45f, -0.35f), new Vector3(0.35f, 0.6f, 0.13f), "Accent_Blue");
             Object.DestroyImmediate(head.GetComponent<Collider>());
             var plate = Box("Nameplate", root, new Vector3(-1f, 0.8f, 6.95f), new Vector3(0.4f, 0.12f, 0.02f), "Grey_Prop");
             Object.DestroyImmediate(plate.GetComponent<Collider>());
@@ -275,9 +293,10 @@ namespace TWIN.EditorTools
             Bouquet(root, new Vector3(-0.2f, 0f, 7.0f), 1f);
 
             // His mother: same face as the shopkeeper and the child. Starts facing the coffin, turns to the player.
+            var motherRig = Rig("MotherRig", root);
             var mother = (GameObject)PrefabUtility.InstantiatePrefab(s_childPrefab);
             mother.name = "Mother";
-            mother.transform.SetParent(root, false);
+            mother.transform.SetParent(motherRig.transform, false);
             mother.transform.localPosition = new Vector3(0.1f, 0f, 8.0f);
             mother.transform.localScale = Vector3.one * 1.3f;
             mother.transform.localRotation = Quaternion.Euler(0f, -90f, 0f);
@@ -285,7 +304,7 @@ namespace TWIN.EditorTools
             var organ = root.gameObject.AddComponent<AudioSource>();
             organ.playOnAwake = false; organ.spatialBlend = 0f;
 
-            var standPt = StandPoint(root, new Vector3(-1f, 0f, 6.0f), 0f, 10f);
+            var standPt = StandPoint(root, new Vector3(-0.6f, 0f, 5.3f), 10f, 5f); // a step back, coffin and mother both in view
 
             var ctl = new GameObject("TheFuneralController").AddComponent<TheFuneralController>();
             ctl.ending = Ending.TheFuneral;
@@ -299,7 +318,7 @@ namespace TWIN.EditorTools
             tl.Beat(0.2, nameof(TheFuneralController.HeartbeatStarts));
             tl.Beat(2.0, nameof(EndingController.WalkToStandPoint));       // 4 s, to the coffin
             tl.Beat(6.5, nameof(TheFuneralController.HeartbeatRamps));     // faster as she turns
-            tl.Animate(mother, RotateClip("TheFuneral_MotherTurns", new Vector3(0f, -90f, 0f), new Vector3(0f, -180f, 0f), 4f), 6.5, 4.0, "Mother turns");
+            tl.Animate(motherRig, RotateClip("TheFuneral_MotherTurns", "Mother", new Vector3(0f, -90f, 0f), new Vector3(0f, -165f, 0f), 4f) /* -165 = facing the stand point */, 6.5, 4.0, "Mother turns");
             tl.Beat(10.8, nameof(TheFuneralController.SayMorningSam));
             tl.Beat(13.5, nameof(EndingController.CutToBlack));            // hold one beat, then black
             tl.Beat(13.5, nameof(EndingController.StopHaptics));

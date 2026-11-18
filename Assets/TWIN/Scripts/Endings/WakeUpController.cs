@@ -31,7 +31,8 @@ namespace TWIN.Endings
             AudioListener.volume = 0f;
         }
 
-        public void ShowTakeOffHeadset() { if (GM != null) GM.ShowCenterText(GM.lines.takeOffHeadset); }
+        /// <summary>Dark text on the white screen.</summary>
+        public void ShowTakeOffHeadset() { if (GM != null) GM.ShowCenterText($"<color=#1a1a1a>{GM.lines.takeOffHeadset}</color>"); }
 
         /// <summary>
         /// Switch the Quest 3 to passthrough so the player sees the real room and the audience.

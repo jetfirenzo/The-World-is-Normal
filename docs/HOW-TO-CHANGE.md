@@ -23,7 +23,34 @@ Edit the four assets in `Assets/TWIN/Data/Forks/`. `voteSeconds` is the countdow
 Nothing else changes: scenes only talk to `ForkController.RunFork`.
 
 ## Change the ending rules
-See `docs/ENDINGS-TODO.md`. One function, one test file.
+`EndingResolver.Resolve` in `Scripts/Core/EndingResolver.cs`, rules in priority order, and
+`Tests/EditMode/EndingResolverTests.cs`. Nothing else needs to change.
+
+## Retime an ending
+Open the ending scene (`Assets/TWIN/Scenes/End_*.unity`), select the controller object, open
+Window > Sequencing > Timeline. Drag the markers on **Beats** and the clips on the animation tracks.
+Fade, walk and write durations are fields on the controller in the Inspector.
+The builder regenerates these Timelines, so either copy the new times into `GreyboxEndings.cs`
+(`tl.Beat(time, …)` / `tl.Animate(…, start, duration, …)`) or stop running the builder.
+
+## Add a beat to an ending
+1. Add a public parameterless method to the ending's controller (`Scripts/Endings/*Controller.cs`).
+2. In `GreyboxEndings.cs`, add `tl.Beat(seconds, nameof(MyController.MyMethod));` and run the builder.
+   (By hand: add a Signal Emitter to the Beats track, create a Signal asset, and add a reaction on the
+   controller's `SignalReceiver` that calls your method.)
+
+## Change ending lines
+`Data/NarratorLines.asset`, section "Endings" (restart prompt, "Good boy, Sam.", the note text,
+"Morning, Sam.", the nameplate, "Take off the headset.", "SYSTEM ERROR").
+
+## Debug an ending without playing the whole game
+Open `07_LastMorning`, set its `SceneBootstrapper` debug state (see DESKTOP-TESTING.md), press Play, turn off
+the alarm, vote, then use the bed or the door. Tick `useEndOfDemoFallback` on `Resources/TWIN_Persistent`
+to get the END OF DEMO screen instead of the ending.
+
+## Haptics
+Call `HapticsService.Instance` (`Click`, `Pulse`, `StartSlowPulse`, `StartHeartbeat`, `StopLoop`, `StopAll`).
+`masterStrength` on the `TWIN_Persistent` prefab scales everything.
 
 ## Change the order of scenes or rename one
 Edit `Assets/TWIN/Data/SceneFlow.asset` (names must match the `.unity` files and the Build Settings).

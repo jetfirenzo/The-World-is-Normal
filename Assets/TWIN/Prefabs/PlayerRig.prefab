@@ -338,12 +338,12 @@ MonoBehaviour:
       m_Name: Position
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: 7605cfbe-b5f2-4d86-b6cf-5d0489afe23d
+      m_Id: a02a87a5-4e45-4a8d-a919-25530d0213b8
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings:
       - m_Name: 
-        m_Id: 81f1596f-bf8e-4fc4-96a4-ab2875ee1fba
+        m_Id: c819c84f-6897-4551-ae4d-328e6c1f1476
         m_Path: <XRHMD>/centerEyePosition
         m_Interactions: 
         m_Processors: 
@@ -359,12 +359,12 @@ MonoBehaviour:
       m_Name: Rotation
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: 9fa70b6c-2e6b-4706-9857-ae647c364dc0
+      m_Id: 92c35a77-1715-42ce-baea-f0a1d3c8902e
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings:
       - m_Name: 
-        m_Id: 1f78d3bf-f103-4ccb-9172-49b9d8b06466
+        m_Id: 8570987d-8a7e-45bb-ad7d-0cab9807b633
         m_Path: <XRHMD>/centerEyeRotation
         m_Interactions: 
         m_Processors: 
@@ -380,7 +380,7 @@ MonoBehaviour:
       m_Name: Tracking State
       m_Type: 0
       m_ExpectedControlType: Integer
-      m_Id: b77411fd-1de1-460b-a4f9-fc6c104a57f4
+      m_Id: 723d4813-0b03-498c-94c4-bc2a30397bbd
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []
@@ -391,7 +391,7 @@ MonoBehaviour:
     m_Name: 
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: 4def4ab8-2f4b-4375-bcba-7bd55324344c
+    m_Id: bac71059-3e05-4ad3-9aba-19477c8ab4aa
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -401,7 +401,7 @@ MonoBehaviour:
     m_Name: 
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: d3f5d4d8-b52e-4516-9aa5-39fb5feac7d1
+    m_Id: 4de19eaa-35f5-4244-9e6e-4b6f89c248e7
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []

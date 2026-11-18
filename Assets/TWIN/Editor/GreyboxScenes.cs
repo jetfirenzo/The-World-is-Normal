@@ -160,7 +160,8 @@ namespace TWIN.EditorTools
 
         static Interactable Interact(GameObject go, string prompt)
         {
-            var i = go.GetComponent<Interactable>() ?? go.AddComponent<Interactable>();
+            var i = go.GetComponent<Interactable>();
+            if (i == null) i = go.AddComponent<Interactable>();
             i.prompt = prompt;
             return i;
         }

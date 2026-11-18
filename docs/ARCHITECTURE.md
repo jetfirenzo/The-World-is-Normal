@@ -14,8 +14,9 @@ It carries:
 | `ForkController` | runs a fork: asks the vote provider, writes the result into `GameState`, calls the scene back |
 | `KeyboardVoteProvider` | the desktop stand-in for the live audience (keys 1/2, two buttons, countdown, tally) |
 | `ScreenFader` | black fade for transitions |
-| `DebugOverlay` | F1 overlay, scene jump keys |
-| Canvas + EventSystem | overlay UI: subtitle, prompt, crosshair, fork panel, debug text, fader |
+| `DebugOverlay` | F1 overlay, scene jump keys, R = new run |
+| `HapticsService` | controller haptics (click, slow pulse, heartbeat); logs only on desktop |
+| Canvas + EventSystem | overlay UI: subtitle, prompt, crosshair, fork panel, debug text, fader, and above the fader the ending texts (centre text, restart prompt) |
 
 Who spawns it: `SceneBootstrapper` (one in every scene) instantiates the prefab from `Resources` when
 `GameManager.Instance` is null, so any scene can be played standalone.
@@ -26,7 +27,8 @@ Who spawns it: `SceneBootstrapper` (one in every scene) instantiates the prefab 
 `strangeCount`, `route`, `notePocketed`, plus `forkWasStrange[4]` / `forkAnswered[4]`.
 All changes go through `ApplyFork(index, strange)`, which also applies the fork's side effects
 (fork 1 strange → `notePocketed`, fork 2 → `route`). `DoorAppearsInLastMorning` is the scene 7 rule.
-`EndingResolver.Resolve(state)` is the single function that names the ending.
+`DoorOpened` is fork 4 answered STRANGE. `EndingResolver.Resolve(state)` is the single function that picks
+the `Ending` enum value.
 
 ## Scene flow
 
@@ -37,8 +39,31 @@ when a door should bypass the flow (unused in the greybox).
 
 ```
 00_Boot → 01_Bedroom → 02_Bathroom → 03_LivingRoom → 04_Street → 05_Shop ─┬→ 06A_FrontDoor ─┐
-                                                                         └→ 06B_Backrooms ─┴→ 07_LastMorning → 99_EndOfDemo → 00_Boot
+                                                                         └→ 06B_Backrooms ─┴→ 07_LastMorning
+07_LastMorning + (additive) End_<resolved ending>  ──R──→ 01_Bedroom
+07_LastMorning → 99_EndOfDemo  (only with useEndOfDemoFallback ticked)
 ```
+
+## Endings
+
+After the last morning, `GameManager.GoToNextScene()` calls `LoadEnding(EndingResolver.Resolve(State))`,
+which loads `SceneFlow.EndingScene(ending)` **additively**: the last morning stays loaded, so an ending can
+lie the player in its bed or open its door. It finds those through `LastMorningBridge` (in
+`07_LastMorning`: bed lie point, appeared door, north wall, hand note). Endings that show a different
+room build it at x = +60 (outside the bedroom) and teleport the player there; endings behind the door
+build their room at z > 2.5, behind the last morning's north wall, and swap that wall for a doorway.
+
+Each ending scene has one `EndingController` subclass (`Scripts/Endings/`) and a `PlayableDirector`
+playing `Data/Endings/End_*.playable`:
+
+* **Beats** (Signal track): each marker calls one parameterless controller method through a
+  `SignalReceiver`, for example `LieDown`, `FadeToBlack`, `OpenDoor`, `WalkToStandPoint`,
+  `ShowRestartPrompt`, plus ending-specific ones (`SayGoodBoy`, `WriteNote`, `HeartbeatRamps`, …).
+* **Animation tracks**: an `Animator` on a parent "rig" object, the clip animates the child by path
+  (the Animator's own root must not be animated, or Timeline moves the prop to the world origin).
+
+The controller disables `DesktopRig` while the ending runs and moves the player itself.
+`GameManager.RestartDemo()` undoes everything an ending can change (state, volume, fader, haptics, texts).
 
 ## A scene
 
@@ -73,6 +98,8 @@ Interaction Toolkit interactors are **not** in the rig yet; see HOW-TO-CHANGE.md
 
 ## Build pipeline
 
-`Editor/GreyboxBuilder.cs` (+ `GreyboxScenes.cs`) generates everything from code so the greybox is
-reproducible and diffable. Materials and data assets are created only when missing; prefabs and
-scenes are overwritten on every run. Build Settings scene list is set from `SceneFlow.All`.
+`Editor/GreyboxBuilder.cs` (+ `GreyboxScenes.cs`, `GreyboxEndings.cs`) generates everything from code so
+the greybox is reproducible and diffable. Materials and data assets are created only when missing; prefabs,
+scenes, ending Timelines, signals and clips are overwritten on every run. Build Settings scene list is set
+from `SceneFlow.All`. Note for builder code: never use `??` on Unity objects (a missing component is a
+"fake null" that `??` treats as present); use an explicit `== null` check.

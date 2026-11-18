@@ -318,9 +318,11 @@ namespace TWIN.EditorTools
             // Ending texts (hidden until an ending shows them)
             var center = UIText(canvasGo.transform, "CenterText", "", 64, TextAlignmentOptions.Center, Vector2.zero, new Vector2(1400, 300));
             center.fontStyle = FontStyles.Bold;
+            center.outlineWidth = 0.2f; center.outlineColor = Color.black; // readable on white (Wake up) and on black
             center.gameObject.SetActive(false);
             var restart = UIText(canvasGo.transform, "RestartPrompt", "", 30, TextAlignmentOptions.Bottom, new Vector2(0, 30), new Vector2(1200, 50), new Vector2(0.5f, 0f));
-            restart.color = new Color(1f, 1f, 1f, 0.85f);
+            restart.color = new Color(1f, 1f, 1f, 0.9f);
+            restart.outlineWidth = 0.25f; restart.outlineColor = Color.black;
             restart.gameObject.SetActive(false);
             gm.centerText = center; gm.restartPromptText = restart;
 
@@ -332,6 +334,10 @@ namespace TWIN.EditorTools
             var frt = fade.rectTransform; frt.anchorMin = Vector2.zero; frt.anchorMax = Vector2.one; frt.offsetMin = frt.offsetMax = Vector2.zero;
             fade.raycastTarget = false;
             fader.image = fade;
+
+            // Ending texts render ABOVE the fader (they must stay readable on black and on white).
+            center.transform.SetAsLastSibling();
+            restart.transform.SetAsLastSibling();
 
             // Event system for the buttons
             var es = new GameObject("EventSystem");

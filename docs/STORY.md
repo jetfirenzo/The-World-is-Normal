@@ -37,11 +37,38 @@ The alarm rings. If `notePocketed`, the note is in the player's hand and now rea
 sleep." If `strangeCount >= 2` OR `notePocketed`, a door has appeared in the wall.
 FORK 4 (only if the door exists): go back to bed (normal) / open the door (strange). No door = no vote, Sam goes back to bed.
 
-## Endings: NOT now
+## Endings
 
-Do not build the ending scenes. After fork 4, show a placeholder screen: "END OF DEMO", plus the
-final `strangeCount`, `route`, `notePocketed` and the name of the ending that WOULD play, computed by
-one function `EndingResolver.Resolve(GameState)` with these rules:
+After fork 4 the resolved ending plays (the END OF DEMO screen is now a debug fallback).
+`EndingResolver.Resolve(GameState)` picks one:
 
-* `strangeCount == 4` → "System error" (overrides everything else)
-* *(the brief was cut off here — see ENDINGS-TODO.md)*
+* `strangeCount == 4` → SYSTEM ERROR (overrides all)
+* door opened, `strangeCount == 3` → WAKE UP
+* door opened, `strangeCount == 2` → THE FUNERAL
+* back to bed, `strangeCount` 2–3 → THE NOTE
+* back to bed, `strangeCount` 0–1 → GOOD MORNING, SAM (also when no door appeared)
+
+Every ending finishes with "Press R to start a new run" (later: the operator presses a button).
+
+**1. GOOD MORNING, SAM** (bad ending, the loop). The player lies down. The screen slowly fades to black,
+as if eyes close. Narrator, warm: "Good boy, Sam." Two seconds of black and silence. Then the alarm
+rings and the clock shows 11:11. Fade back into the normal Bedroom from scene 1. Restart prompt over it.
+Haptics: alarm click on the hands at the end.
+
+**2. THE NOTE** (twist, the loop explained). The player lies down. A short fade. The player is suddenly
+standing next to the bed. Someone else is waking up in the bed (the shared NPC, under the duvet, face
+turned away). The player's hand moves on its own to the bedside table, picks up a pen and writes the
+note: "Your name isn't Sam." The text appears letter by letter on PROP_Note. The figure in the bed starts
+to sit up. Cut to black. Haptics: a slow pulse on the hands while the hand writes.
+
+**3. THE FUNERAL** (dark). The door in the wall opens into a small funeral room: rows of chairs, flowers,
+soft organ hum. An open coffin with Sam in it, nameplate "SAM". Next to it his mother: the shared NPC,
+same face as the shopkeeper. She turns slowly toward the player and smiles: "Morning, Sam." Hold one
+beat, then black. Haptics: heartbeat that gets faster as the mother turns.
+
+**4. WAKE UP** (good ending). The door opens onto pure white. Sound fades to total silence over
+3 seconds. Everything fades to white. Text: "Take off the headset." Later: switch the Quest 3 to
+passthrough (`WakeUpController.EnablePassthrough()`, not implemented yet).
+Haptics: *the brief was cut off here*; implemented as "all haptics stop".
+
+**5. SYSTEM ERROR.** *Not described in the brief yet.* Placeholder: glitch, "SYSTEM ERROR", prompt.
