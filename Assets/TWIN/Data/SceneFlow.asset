@@ -22,3 +22,8 @@ MonoBehaviour:
   backrooms: 06B_Backrooms
   lastMorning: 07_LastMorning
   endOfDemo: 99_EndOfDemo
+  endGoodMorningSam: End_GoodMorningSam
+  endTheNote: End_TheNote
+  endTheFuneral: End_TheFuneral
+  endWakeUp: End_WakeUp
+  endSystemError: End_SystemError

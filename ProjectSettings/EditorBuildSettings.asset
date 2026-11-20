@@ -7,49 +7,52 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/TWIN/Scenes/00_Boot.unity
-    guid: 15312660a1a52ce4cbd29d8c05257fcf
+    guid: e8b302b8aa21cde4a935950e593b18db
   - enabled: 1
     path: Assets/TWIN/Scenes/01_Bedroom.unity
-    guid: 6c393cd54a57b1b4eb9c44b7aa7b73cd
+    guid: 93c9d7fb26a9a1247b30229c760db578
   - enabled: 1
     path: Assets/TWIN/Scenes/02_Bathroom.unity
-    guid: 20de60213e17d5e47b8d7f4360693fed
+    guid: 1385a584478cd844aa20a95a8dc8395d
   - enabled: 1
     path: Assets/TWIN/Scenes/03_LivingRoom.unity
-    guid: f88b09a59ca20ff4285915689a523cb3
+    guid: 455ff558d958ae1409ee9a18bcdd6b0c
   - enabled: 1
     path: Assets/TWIN/Scenes/04_Street.unity
-    guid: d4176d1ba718a4c4da184103941251c9
+    guid: 9e82e5b949de6a849b96662d8362db3e
   - enabled: 1
     path: Assets/TWIN/Scenes/05_Shop.unity
-    guid: 60b526a9ef3ef6f41969c331fb78c9d9
+    guid: da2e3eab09857814095f6da15bf65c0f
   - enabled: 1
     path: Assets/TWIN/Scenes/06A_FrontDoor.unity
-    guid: 737829bc53c945646a5e3c299f176976
+    guid: c92e5c0674ae157448c11ef6e3489830
   - enabled: 1
     path: Assets/TWIN/Scenes/06B_Backrooms.unity
-    guid: 8f9aa759bc2a90d4dac71173975def8c
+    guid: b218e4bfc0eb4c042a2a1a4bea3b769c
   - enabled: 1
     path: Assets/TWIN/Scenes/07_LastMorning.unity
-    guid: 2b0ebb1ccc703d14dba9794b8225813e
+    guid: 77d4a2b1780e1c944aa216883cb8aa5a
   - enabled: 1
     path: Assets/TWIN/Scenes/99_EndOfDemo.unity
-    guid: 36fadc36e0c549e418e8149f0e2dc723
+    guid: 7963e194998174b4faef11ad66b136b2
   - enabled: 1
     path: Assets/TWIN/Scenes/End_GoodMorningSam.unity
-    guid: 36e2e0d3cfb46844fbb53b60d309fdb6
+    guid: 32f9829ce94eeb04280856cfe9848e75
   - enabled: 1
     path: Assets/TWIN/Scenes/End_TheNote.unity
-    guid: e18309a5ebbcde14ab7bf72d327a32c7
+    guid: 7e96486763059ab4384e45311aa8a898
   - enabled: 1
     path: Assets/TWIN/Scenes/End_TheFuneral.unity
-    guid: c1eca2b85440ffa44bb78debac9fde35
+    guid: f97db497dd1e9b54aa10904a4681638e
   - enabled: 1
     path: Assets/TWIN/Scenes/End_WakeUp.unity
-    guid: 07ba6463154aac94caf4807668962167
+    guid: 3d754fa9d21ce9547a4fb608ff03b665
   - enabled: 1
     path: Assets/TWIN/Scenes/End_SystemError.unity
-    guid: 5456553f3b3611e4a8dab9e89b722648
+    guid: d15becd755bb4fe4a8fbb8dac0ee57fa
+  - enabled: 1
+    path: Assets/Supermarkt_Publiek.unity
+    guid: 7f7216615cd01284a8e1b940f00c1056
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260, type: 2}
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: dc5a169419fa04987b057f65238cf3ba, type: 2}

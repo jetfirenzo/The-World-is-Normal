@@ -23,4 +23,11 @@ MonoBehaviour:
   everythingFree: That's free. Everything is free today.
   noteTextLastMorning: Don't go back to sleep.
   backToSleep: Time to go back to sleep, Sam.
+  restartPrompt: Press R to start a new run
+  goodBoySam: Good boy, Sam.
+  noteBeingWritten: Your name isn't Sam.
+  morningSam: Morning, Sam.
+  coffinNameplate: SAM
+  takeOffHeadset: Take off the headset.
+  systemError: SYSTEM ERROR
   endOfDemo: END OF DEMO

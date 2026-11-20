@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &747934439
+--- !u!1 &627293373
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,8 +127,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 747934441}
-  - component: {fileID: 747934440}
+  - component: {fileID: 627293375}
+  - component: {fileID: 627293374}
   m_Layer: 0
   m_Name: SceneBootstrapper
   m_TagString: Untagged
@@ -136,13 +136,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &747934440
+--- !u!114 &627293374
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 747934439}
+  m_GameObject: {fileID: 627293373}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b6a0044eeaf524445835d693bb18bebe, type: 3}
@@ -153,13 +153,13 @@ MonoBehaviour:
   debugRoute: 1
   debugNotePocketed: 0
   debugFork3Strange: 0
---- !u!4 &747934441
+--- !u!4 &627293375
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 747934439}
+  m_GameObject: {fileID: 627293373}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -168,7 +168,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1376239746
+--- !u!1 &1643636840
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -176,10 +176,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1376239750}
-  - component: {fileID: 1376239749}
-  - component: {fileID: 1376239748}
-  - component: {fileID: 1376239747}
+  - component: {fileID: 1643636844}
+  - component: {fileID: 1643636843}
+  - component: {fileID: 1643636842}
+  - component: {fileID: 1643636841}
   m_Layer: 0
   m_Name: SystemErrorController
   m_TagString: Untagged
@@ -187,13 +187,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1376239747
+--- !u!114 &1643636841
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1376239746}
+  m_GameObject: {fileID: 1643636840}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
@@ -201,13 +201,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.SignalReceiver
   m_Events:
     m_Signals:
-    - {fileID: 11400000, guid: fca293acfaf5caf4297d9f822111edf2, type: 2}
-    - {fileID: 11400000, guid: 9f328fbfc85b3d740961e89901742273, type: 2}
-    - {fileID: 11400000, guid: 3636ed009bb09ec4895c83c1fbdc49ed, type: 2}
+    - {fileID: 11400000, guid: 0f65e4375d15e7944891adaa3361eb21, type: 2}
+    - {fileID: 11400000, guid: eafe268889500da4784c54b96b4650b0, type: 2}
+    - {fileID: 11400000, guid: 576c2ba09e1f21c4d8c66432bc57dcde, type: 2}
     m_Events:
     - m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1376239748}
+        - m_Target: {fileID: 1643636842}
           m_TargetAssemblyTypeName: TWIN.Endings.SystemErrorController, TWIN.Runtime
           m_MethodName: Glitch
           m_Mode: 0
@@ -221,7 +221,7 @@ MonoBehaviour:
           m_CallState: 2
     - m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1376239748}
+        - m_Target: {fileID: 1643636842}
           m_TargetAssemblyTypeName: TWIN.Endings.SystemErrorController, TWIN.Runtime
           m_MethodName: ShowSystemError
           m_Mode: 0
@@ -235,7 +235,7 @@ MonoBehaviour:
           m_CallState: 2
     - m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1376239748}
+        - m_Target: {fileID: 1643636842}
           m_TargetAssemblyTypeName: TWIN.Endings.EndingController, TWIN.Runtime
           m_MethodName: ShowRestartPrompt
           m_Mode: 0
@@ -247,52 +247,52 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
---- !u!114 &1376239748
+--- !u!114 &1643636842
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1376239746}
+  m_GameObject: {fileID: 1643636840}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 25a7cb376f987254c9aeb2e16494c4b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: TWIN.Runtime::TWIN.Endings.SystemErrorController
   ending: 4
-  director: {fileID: 1376239749}
+  director: {fileID: 1643636843}
   standPoint: {fileID: 0}
   doorwayWall: {fileID: 0}
   fadeSeconds: 3
   walkSeconds: 4
   doorSwingSeconds: 1.5
   glitchSeconds: 2
---- !u!320 &1376239749
+--- !u!320 &1643636843
 PlayableDirector:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1376239746}
+  m_GameObject: {fileID: 1643636840}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 9f7ff9330f29e354a8d6080b8eb4001c, type: 2}
+  m_PlayableAsset: {fileID: 11400000, guid: 0c7edce8624fa594e8a4f7f88791250b, type: 2}
   m_InitialState: 0
   m_WrapMode: 0
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
   m_SceneBindings:
-  - key: {fileID: -7573932730905620428, guid: 9f7ff9330f29e354a8d6080b8eb4001c, type: 2}
-    value: {fileID: 1376239746}
+  - key: {fileID: -6026516833757605690, guid: 0c7edce8624fa594e8a4f7f88791250b, type: 2}
+    value: {fileID: 1643636840}
   m_ExposedReferences:
     m_References: []
---- !u!4 &1376239750
+--- !u!4 &1643636844
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1376239746}
+  m_GameObject: {fileID: 1643636840}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -305,5 +305,5 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 747934441}
-  - {fileID: 1376239750}
+  - {fileID: 627293375}
+  - {fileID: 1643636844}
