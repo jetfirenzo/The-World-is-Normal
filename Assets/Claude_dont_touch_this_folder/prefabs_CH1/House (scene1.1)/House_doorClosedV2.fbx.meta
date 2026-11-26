@@ -1,34 +1,9 @@
 fileFormatVersion: 2
-guid: ebefd8af25c99e447862a56df709328c
+guid: bf9d9ad8950d6084b80311abc6565bfe
 ModelImporter:
   serializedVersion: 24600
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: Wood026_1K-PNG_Color
-    second: {fileID: 2800000, guid: 62de0949ba441e94bb469efeb72c58e6, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: Wood049_1K-PNG_Color
-    second: {fileID: 2800000, guid: 5ca32b304eac6ce479ce5563ab2e6124, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: Wood050_1K-PNG_Color
-    second: {fileID: 2800000, guid: b7f457b30f00e8549a0ba62ba1fb88c6, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: Wood095_1K-PNG_Color
-    second: {fileID: 2800000, guid: c5d4791039eec25428cdc9bb47ce7c33, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: wallpaper_striped
-    second: {fileID: 2800000, guid: 5a5322e3658227d4fb811dc819581cd5, type: 3}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
